@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Food Waste Management System{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">Dashboard</h1>
+
+{% if user_profile.user_type == 'donor' %}
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <h3>{{ total_donations }}</h3>
+        <p>Total Donations</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ pending_count }}</h3>
+        <p>Pending</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ accepted_count }}</h3>
+        <p>Accepted</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ completed_count }}</h3>
+        <p>Completed</p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Recent Donations</h3>
+    {% if my_donations %}
+        {% for donation in my_donations %}
+        <div class="donation-item">
+            <h4>{{ donation.food_name }}</h4>
+            <div class="donation-meta">
+                <span>📦 {{ donation.get_food_type_display }}</span>
+                <span>🔢 Quantity: {{ donation.quantity }}</span>
+                <span>⏰ {{ donation.time_remaining }}</span>
+                <span class="status-badge status-{{ donation.status }}">{{ donation.get_status_display }}</span>
+            </div>
+            <p>{{ donation.description|truncatewords:20 }}</p>
+            <p><strong>📍 Pickup:</strong> {{ donation.pickup_location }}</p>
+            <a href="{% url 'donation_detail' donation.id %}" class="btn" style="margin-top: 0.5rem;">View Details</a>
+        </div>
+        {% endfor %}
+        <a href="{% url 'food_history' %}" class="btn btn-secondary">View All History</a>
+    {% else %}
+        <p>No donations yet. <a href="{% url 'post_food' %}">Post your first donation!</a></p>
+    {% endif %}
+</div>
+
+{% else %}
+
+<div class="dashboard-grid">
+    <div class="stat-card">
+        <h3>{{ total_available }}</h3>
+        <p>Available Donations</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_accepted }}</h3>
+        <p>My Accepted Pickups</p>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card">
+        <h3>Available Donations</h3>
+        {% if available_donations %}
+            {% for donation in available_donations %}
+            <div class="donation-item">
+                <h4>{{ donation.food_name }}</h4>
+                <div class="donation-meta">
+                    <span>📦 {{ donation.get_food_type_display }}</span>
+                    <span>🔢 {{ donation.quantity }}</span>
+                    <span>⏰ {{ donation.time_remaining }}</span>
+                </div>
+                <p>{{ donation.description|truncatewords:15 }}</p>
+                <p><strong>📍</strong> {{ donation.pickup_location }}</p>
+<form method="POST" action="{% url 'accept_donation' donation.id %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn" style="margin-top: 0.5rem;">Accept Donation</button>
+</form>            </div>
+            {% endfor %}
+            <a href="{% url 'available_donations' %}" class="btn btn-secondary">View All Available</a>
+        {% else %}
+            <p>No donations available at the moment.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h3>My Accepted Pickups</h3>
+        {% if my_accepted %}
+            {% for donation in my_accepted %}
+            <div class="donation-item">
+                <h4>{{ donation.food_name }}</h4>
+                <div class="donation-meta">
+                    <span>📦 {{ donation.get_food_type_display }}</span>
+                    <span>⏰ {{ donation.time_remaining }}</span>
+                    <span class="status-badge status-{{ donation.status }}">{{ donation.get_status_display }}</span>
+                </div>
+                <p><strong>📍</strong> {{ donation.pickup_location }}</p>
+                <a href="{% url 'donation_detail' donation.id %}" class="btn" style="margin-top: 0.5rem;">View Details</a>
+            </div>
+            {% endfor %}
+            <a href="{% url 'food_history' %}" class="btn btn-secondary">View All History</a>
+        {% else %}
+            <p>You haven't accepted any donations yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Food Waste Management System{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🍽️ Welcome to Food Share NGO</h1>
+    <p>Fighting Food Waste, Feeding Hope</p>
+    <p>Join us in our mission to redistribute surplus food to those in need</p>
+    <div style="margin-top: 2rem;">
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="btn">Get Started</a>
+            <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="grid-2" style="margin-top: 3rem;">
+    <div class="card">
+        <h3>🎁 For Donors</h3>
+        <p>Have surplus food? Don't let it go to waste!</p>
+        <ul style="margin: 1rem 0; line-height: 2;">
+            <li>Post your food donations easily</li>
+            <li>Track donation status in real-time</li>
+            <li>Help feed those in need</li>
+            <li>Reduce food waste</li>
+        </ul>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn">Register as Donor</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h3>🏢 For NGOs</h3>
+        <p>Looking for food donations for your cause?</p>
+        <ul style="margin: 1rem 0; line-height: 2;">
+            <li>Browse available food donations</li>
+            <li>Accept and schedule pickups</li>
+            <li>Manage multiple pickups</li>
+            <li>Serve the community better</li>
+        </ul>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn">Register as NGO</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem; text-align: center;">
+    <h3>How It Works</h3>
+    <div class="grid-2" style="margin-top: 2rem; text-align: left;">
+        <div>
+            <h4 style="color: var(--primary-color);">1️⃣ Register</h4>
+            <p>Sign up as a donor or NGO</p>
+        </div>
+        <div>
+            <h4 style="color: var(--primary-color);">2️⃣ Post/Browse</h4>
+            <p>Donors post food, NGOs browse available donations</p>
+        </div>
+        <div>
+            <h4 style="color: var(--primary-color);">3️⃣ Connect</h4>
+            <p>NGOs accept donations and arrange pickup</p>
+        </div>
+        <div>
+            <h4 style="color: var(--primary-color);">4️⃣ Impact</h4>
+            <p>Food reaches those who need it most</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

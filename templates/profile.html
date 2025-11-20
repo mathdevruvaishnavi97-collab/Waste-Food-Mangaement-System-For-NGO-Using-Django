@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Food Waste Management System{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+    <div class="profile-header">
+        {% if user_profile.profile_image %}
+            <img src="{{ user_profile.profile_image.url }}" alt="Profile" class="profile-image">
+        {% else %}
+            <div class="profile-image" style="background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                {{ user.username|first|upper }}
+            </div>
+        {% endif %}
+        <h2>{{ user.username }}</h2>
+        <p style="color: #666;">{{ user_profile.get_user_type_display }}</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" value="{{ user_profile.phone }}">
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" name="address">{{ user_profile.address }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="profile_image">Profile Image</label>
+            <input type="file" id="profile_image" name="profile_image" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

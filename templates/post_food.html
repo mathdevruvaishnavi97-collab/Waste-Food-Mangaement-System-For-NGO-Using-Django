@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Post Food Donation - Food Waste Management System{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 700px;">
+    <h2>🍽️ Post Food Donation</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="food_type">Food Type</label>
+            <select id="food_type" name="food_type" required>
+                <option value="cooked">Cooked Food</option>
+                <option value="raw">Raw Food</option>
+                <option value="packaged">Packaged Food</option>
+                <option value="fruits">Fruits & Vegetables</option>
+                <option value="bakery">Bakery Items</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="food_name">Food Name</label>
+            <input type="text" id="food_name" name="food_name" placeholder="e.g., Rice and Curry" required>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="text" id="quantity" name="quantity" placeholder="e.g., 50 servings, 10 kg" required>
+        </div>
+
+        <div class="form-group">
+            <label for="expiry_hours">Best Before (Hours from now)</label>
+            <input type="number" id="expiry_hours" name="expiry_hours" min="1" placeholder="e.g., 12" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Provide details about the food..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="food_image">Food Image (Optional)</label>
+            <input type="file" id="food_image" name="food_image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label for="pickup_location">Pickup Location Name</label>
+            <input type="text" id="pickup_location" name="pickup_location" placeholder="e.g., City Restaurant" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pickup_address">Pickup Address</label>
+            <textarea id="pickup_address" name="pickup_address" placeholder="Full address for pickup..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Post Donation</button>
+    </form>
+</div>
+{% endblock %}

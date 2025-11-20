@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ donation.food_name }} - Donation Details{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2>{{ donation.food_name }}</h2>
+    
+    {% if donation.food_image %}
+        <img src="{{ donation.food_image.url }}" alt="{{ donation.food_name }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin: 1rem 0;">
+    {% endif %}
+
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Donation Information</h3>
+        <p><strong>Food Type:</strong> {{ donation.get_food_type_display }}</p>
+        <p><strong>Quantity:</strong> {{ donation.quantity }}</p>
+        <p><strong>Best Before:</strong> {{ donation.time_remaining }}</p>
+        <p><strong>Status:</strong> <span class="status-badge status-{{ donation.status }}">{{ donation.get_status_display }}</span></p>
+        <p><strong>Description:</strong></p>
+        <p>{{ donation.description }}</p>
+    </div>
+
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Pickup Details</h3>
+        <p><strong>Location Name:</strong> {{ donation.pickup_location }}</p>
+        <p><strong>Full Address:</strong> {{ donation.pickup_address }}</p>
+    </div>
+
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Contact Information</h3>
+        <p><strong>Donor:</strong> {{ donation.donor.username }}</p>
+        {% if donation.donor.email %}
+            <p><strong>Email:</strong> {{ donation.donor.email }}</p>
+        {% endif %}
+        {% if donation.donor.profile.phone %}
+            <p><strong>Phone:</strong> {{ donation.donor.profile.phone }}</p>
+        {% endif %}
+        {% if donation.accepted_by %}
+            <p><strong>Accepted by:</strong> {{ donation.accepted_by.username }}</p>
+        {% endif %}
+    </div>
+
+    <div style="margin: 2rem 0;">
+        <p><strong>Posted:</strong> {{ donation.created_at|date:"M d, Y - H:i" }}</p>
+        <p><strong>Last Updated:</strong> {{ donation.updated_at|date:"M d, Y - H:i" }}</p>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        {% if donation.status == 'pending' %}
+            {% if user != donation.donor %}
+                <a href="{% url 'accept_donation' donation.id %}" class="btn">Accept Donation</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

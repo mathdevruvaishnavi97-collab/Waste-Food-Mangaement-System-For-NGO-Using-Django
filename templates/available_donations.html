@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Donations - Food Waste Management System{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">🍽️ Available Donations</h1>
+
+<div class="filter-section">
+    <form method="get">
+        <div class="form-group">
+            <label for="food_type">Food Type</label>
+            <select id="food_type" name="food_type">
+                <option value="">All Types</option>
+                <option value="cooked">Cooked Food</option>
+                <option value="raw">Raw Food</option>
+                <option value="packaged">Packaged Food</option>
+                <option value="fruits">Fruits & Vegetables</option>
+                <option value="bakery">Bakery Items</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="search">Search</label>
+            <input type="text" id="search" name="search" placeholder="Search by name or location...">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    {% if donations %}
+        {% for donation in donations %}
+        <div class="donation-item">
+            {% if donation.food_image %}
+                <img src="{{ donation.food_image.url }}" alt="{{ donation.food_name }}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+            {% endif %}
+            <h4>{{ donation.food_name }}</h4>
+            <div class="donation-meta">
+                <span>📦 {{ donation.get_food_type_display }}</span>
+                <span>🔢 Quantity: {{ donation.quantity }}</span>
+                <span>⏰ {{ donation.time_remaining }}</span>
+            </div>
+            <p>{{ donation.description }}</p>
+            <p><strong>📍 Pickup Location:</strong> {{ donation.pickup_location }}</p>
+            <p><strong>📮 Address:</strong> {{ donation.pickup_address }}</p>
+            <p><strong>👤 Donor:</strong> {{ donation.donor.username }}</p>
+            <p><small>Posted: {{ donation.created_at|date:"M d, Y - H:i" }}</small></p>
+            <a href="/accept-donation/2/" class="btn" style="margin-top: 0.5rem;">Accept</a>
+<a href="/donation/2/" class="btn btn-secondary" style="margin-top: 0.5rem;">View Details</a>
+  </div>
+        {% endfor %}
+    {% else %}
+        <p>No donations available at the moment. Check back later!</p>
+    {% endif %}
+</div>
+{% endblock %}
